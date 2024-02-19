@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
+    <title>Pegue o pombo!</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+<script>
+
+//declaração das variável regressiva da contagem//
+var integer = 10;
+
+//Um contador de tempo antes do jogo começar, fazendo uma contagem regressiva
+function logOnConsole (){
+    do {
+    console.log(integer)
+    integer--;
+} while (integer>0);
+}
+console.log("O jogo começará em:")
+logOnConsole();
+
+    //configuração das scenes e do tamanho do frame do jogo
+    var config = { 
+        type: Phaser.AUTO,
+        width: 800,
+        height: 600,
+
+        scene:{
+            preload: preload,
+            create: create,
+            update: update
+        }
+    };
+
+    //declaração das variáveis para o jogo
+    var game = new Phaser.Game(config);
+    var passarinho;
+    var homemCorrendo;
+    //load de todas as imagens necessárias para o jogo
+    function preload(){
+        this.load.image('bg', 'assets/bg_space.png');
+        this.load.spritesheet('bird', 'assets/bird-purple.png', {frameWidth: 75, frameHeight: 75});
+        this.load.spritesheet("man", 'assets/man.png', {frameWidth: 64, frameHeight:64});
+    }
+
+    //função de criação/adição de imagens e animações
+    function create(){
+        this.add.image(400, 300,'bg').setScale(1.2); //adição da imagem de fundo
+        passarinho = this.add.sprite(0, 0, 'bird').setScale(1.3); // designação do sprite do pássaro
+        homemCorrendo = this.add.sprite(0,0,'man').setScale(1.3); // designação do sprite do homem
+
+        //criação da animação, e designação dos frames que serão utilizados no spritesheet, sua frequência e sua repetição que será infinita
+        this.anims.create({
+            key: "fly",
+            frames: this.anims.generateFrameNumbers('bird', {start:0,end:7}),
+            frameRate:10,
+            repeat:-1
+        });
+        this.anims.create({
+            key: "runningMan",
+            frames: this.anims.generateFrameNumbers('man', {start:4,end:11}),
+            frameRate: 10,
+            repeat: -1
+        })
+
+        //chamando essa animação com a key para a animação rodar
+        passarinho.anims.play('fly',true);
+        homemCorrendo.anims.play('runningMan',true)
+    }
+
+    //função de update da movimentação dos personagens
+    function update(){
+        
+        //início do movimento e virar a animação quando chegar na borda esquerda
+        if (homemCorrendo.x === 0 ){
+            homemCorrendo.setFlip(false, false);
+            homemCorrendo.horizontal = true
+        }
+
+        //movimentação do homem para a direita
+        if (homemCorrendo.x < 800 && homemCorrendo.horizontal === true){
+            homemCorrendo.x += 5;
+        }
+
+        //virar o sprite na horizontal caso chegue na borda direita
+        if (homemCorrendo.x === 800){
+            homemCorrendo.setFlip(true, false);
+            homemCorrendo.horizontal = false;
+        }
+
+        //mover o homem para a esquerda
+        if (homemCorrendo.x > 0 && homemCorrendo.horizontal === false){
+            homemCorrendo.x -= 5;
+        }
+        
+        //início do movimento e virar o movimento para o homem ir para baixo
+        if (homemCorrendo.y === 0){
+            homemCorrendo.vertical = true
+        }
+        
+        //movimentação do homem para baixo
+        if (homemCorrendo.y < 600 && homemCorrendo.vertical === true){
+            homemCorrendo.y += 2;
+        }
+        
+        //virar o movimento do homem para cima
+        if (homemCorrendo.y === 600){
+            homemCorrendo.vertical = false
+        }
+
+        //movimentação do homem para cima
+        if (homemCorrendo.y > 0 && homemCorrendo.vertical === false){
+            homemCorrendo.y -= 2
+        }
+
+        ///////////////////////////////////////////////////////////////////////////
+
+        //início do movimento e virar a animação quando chegar na borda esquerda
+        if (passarinho.x === 0 ){
+            passarinho.setFlip(false, false);
+            passarinho.horizontal = true
+        }
+
+        //movimentação do pássaro para a direita
+        if (passarinho.x < 800 && passarinho.horizontal === true){
+            passarinho.x += 10;
+        }
+
+        //virar o sprite na horizontal caso chegue na borda direita
+        if (passarinho.x === 800){
+            passarinho.setFlip(true, false);
+            passarinho.horizontal = false;
+        }
+
+        //mover o pássaro para a esquerda
+        if (passarinho.x > 0 && passarinho.horizontal === false){
+            passarinho.x -= 10;
+        }
+        
+        //início do movimento e virar o movimento para o pássaro ir para baixo
+        if (passarinho.y === 0){
+            passarinho.vertical = true
+        }
+
+        //movimentação do pássaro para baixo
+        if (passarinho.y < 600 && passarinho.vertical === true){
+            passarinho.y += 2;
+        }
+        
+        //virar o movimento do pássaro para cima
+        if (passarinho.y === 600){
+            passarinho.vertical = false
+        }
+
+        //movimentação do pássaro para cima
+        if (passarinho.y > 0 && passarinho.vertical === false){
+            passarinho.y -= 2
+        }
+    }
+</script>
+
+</body>
+</html>
+
+
